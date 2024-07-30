@@ -10,7 +10,7 @@ const Wishlist = () => {
 
   useEffect(() => {
     if (!token) {
-      navigate("/login");
+      // navigate("/login");
       return;
     }
 

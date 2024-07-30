@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import api from "../../Api/api";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -21,15 +21,11 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(
-        "https://ecommerce-backend-fm0r.onrender.com/user/login",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await api.post("/user/login", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (response.status === 200) {
         const data = response.data;
         if (data.role === "user") {
@@ -39,7 +35,7 @@ const Login = () => {
           toast.success("User logged in successfully!");
           navigate("/");
         } else {
-          toast.error("You are not authorized as an User!");
+          toast.error("You are not authorized as a User!");
         }
       } else {
         toast.error(response.data.message || "Failed to login User");
@@ -52,36 +48,42 @@ const Login = () => {
     }
   };
 
-  
+  const handleRegisterRedirect = () => {
+    navigate("/register");
+  };
+
+  const handleForgotPasswordRedirect = () => {
+    navigate("/forgot-password");
+  };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-b from-blue-400 to-cyan-500">
-      <div className="max-w-xl w-full mx-auto p-6 bg-white rounded-lg shadow-xl text-center">
-        <h2 className="text-4xl font-bold mb-4 text-green-700">User Login</h2>
+      <div className="max-w-md w-full mx-auto p-8 bg-white rounded-lg shadow-lg text-center">
+        <h2 className="text-4xl font-bold mb-6 text-green-700">User Login</h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-6">
             <input
-              type="username"
+              type="text"
               name="username"
               placeholder="Username"
               required
               onChange={handleChange}
-              className="border border-gray-300 rounded px-4 py-2 w-full"
+              className="border border-gray-300 rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          <div className="mb-4 text-black">
+          <div className="mb-6">
             <input
               type="password"
               name="password"
               placeholder="Password"
               required
               onChange={handleChange}
-              className="border border-gray-300 rounded px-4 py-2 w-full"
+              className="border border-gray-300 rounded-lg px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="w-full bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition duration-200 ease-in-out"
             disabled={loading}
           >
             {loading ? (
@@ -91,6 +93,22 @@ const Login = () => {
             )}
           </button>
         </form>
+        <div className="mt-6">
+          <button
+            onClick={handleRegisterRedirect}
+            className="w-full bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition duration-200 ease-in-out"
+          >
+            Register
+          </button>
+        </div>
+        <div className="mt-4">
+          <button
+            onClick={handleForgotPasswordRedirect}
+            className="w-full bg-yellow-500 text-white px-4 py-3 rounded-lg hover:bg-yellow-600 transition duration-200 ease-in-out"
+          >
+            Forgot Password
+          </button>
+        </div>
         <ToastContainer />
       </div>
     </div>

@@ -45,7 +45,7 @@ function Navbar() {
       try {
         const token = sessionStorage.getItem("Token");
         if (!token) {
-          navigate("/login");
+          // navigate("/login");
           return;
         }
         const config = {
@@ -186,14 +186,6 @@ function Navbar() {
                         className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                       >
                         Checkout
-                      </Link>
-                    </li>
-                    <li onClick={closeDropdown}>
-                      <Link
-                        to="/login"
-                        className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                      >
-                        Sign In
                       </Link>
                     </li>
                   </ul>

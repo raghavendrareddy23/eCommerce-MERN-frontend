@@ -20,7 +20,7 @@ const Cart = () => {
       try {
         const token = sessionStorage.getItem("Token");
         if (!token) {
-          navigate("/login");
+          // navigate("/login");
           return;
         }
         const config = {
