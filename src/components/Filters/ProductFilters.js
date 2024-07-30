@@ -8,6 +8,7 @@ const ProductFilters = () => {
   const [selectedSubcategory, setSelectedSubcategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +28,7 @@ const ProductFilters = () => {
 
   const handleSubcategorySelect = (subcategory) => {
     setSelectedSubcategory(subcategory ? subcategory : null);
+    setDropdownOpen(false); // Close dropdown after selection
   };
 
   const handlePageChange = (pageNumber) => {
@@ -43,44 +45,52 @@ const ProductFilters = () => {
     : products;
 
   return (
-    <div className="flex">
-      <div className="w-1/4 p-4">
-        {/* Sidebar */}
-        <div className="bg-gray-100 p-4 rounded">
-          <h2 className="text-xxl font-bold mb-4">Filters</h2>
-          <ul>
-            <li
-              key="all"
-              className="cursor-pointer mb-2 transition duration-300 ease-in-out transform hover:scale-110 hover:bg-gray-500"
-              onClick={() => handleSubcategorySelect(null)}
-              style={{ borderBottom: "1px dashed #ccc", paddingBottom: "5px" }}
-            >
-              All
-            </li>
-            {subcategories.map((subcategory) => (
-              <li
-                key={subcategory._id}
-                className="cursor-pointer mb-2 transition duration-300 ease-in-out transform hover:scale-110 hover:bg-gray-500"
-                onClick={() => handleSubcategorySelect(subcategory)}
-                style={{ borderBottom: "1px dashed #ccc", paddingBottom: "5px" }}
-              >
-                {subcategory.subCategoryName}
-              </li>
-            ))}
-          </ul>
+    <div className="flex flex-col lg:flex-row">
+      <div className="w-full lg:w-1/4 p-4">
+        {/* Sidebar with Dropdown */}
+        <div className="bg-gray-100 p-4 rounded relative">
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="w-full text-left bg-gray-200 p-2 rounded-md focus:outline-none"
+          >
+            {selectedSubcategory ? selectedSubcategory.subCategoryName : "Select a Subcategory"}
+            <span className={`ml-2 ${dropdownOpen ? "rotate-180" : "rotate-0"} transition-transform`}>▼</span>
+          </button>
+          {dropdownOpen && (
+            <div className="absolute left-0 w-full mt-2 bg-gray-100 rounded-md shadow-lg z-10">
+              <ul>
+                <li
+                  key="all"
+                  className="cursor-pointer px-4 py-2 hover:bg-gray-200"
+                  onClick={() => handleSubcategorySelect(null)}
+                >
+                  All
+                </li>
+                {subcategories.map((subcategory) => (
+                  <li
+                    key={subcategory._id}
+                    className="cursor-pointer px-4 py-2 hover:bg-gray-200"
+                    onClick={() => handleSubcategorySelect(subcategory)}
+                  >
+                    {subcategory.subCategoryName}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
-      <div className="w-3/4 p-4">
+      <div className="w-full lg:w-3/4 p-4">
         <div className="bg-white p-4 rounded">
-          <h2 className="text-xxl font-bold mb-4">Product List</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <h2 className="text-xl font-bold mb-4">Product List</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {filteredProducts.map((product) => (
               <Link
                 key={product._id}
                 to={`/product/${product._id}`}
                 className="relative group bg-white text-center link-no-underline"
               >
-                <div className="slider-container rounded-lg overflow-hidden transition duration-300 ease-in-out transform hover:scale-105 ">
+                <div className="slider-container rounded-lg overflow-hidden transition duration-300 ease-in-out transform hover:scale-105">
                   {product.imageGallery.slice(0, 1).map((image, index) => (
                     <div key={index}>
                       <img
@@ -91,10 +101,8 @@ const ProductFilters = () => {
                     </div>
                   ))}
                 </div>
-
                 <div className="pt-10">
-                  <h2 className="text-3xl font-semibold">{product.productName}</h2>
-
+                  <h2 className="text-lg font-semibold">{product.productName}</h2>
                   <div className="flex justify-between items-center mt-2">
                     <div>
                       {product.sellPrice && (

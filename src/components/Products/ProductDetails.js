@@ -21,7 +21,7 @@ const ProductDetails = () => {
         setProduct(response.data.data);
         setActiveImage(response.data.data.imageGallery[0]);
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching product details:", error);
       }
     };
 
@@ -70,10 +70,8 @@ const ProductDetails = () => {
           (item) => item.productId._id === productId
         );
         setInWishlist(isInWishlist);
-        
-        
       } catch (error) {
-        console.error("Error checking cart:", error);
+        console.error("Error checking wishlist:", error);
       }
     };
     if (userId) {
@@ -113,7 +111,6 @@ const ProductDetails = () => {
     try {
       const token = sessionStorage.getItem("Token");
       if (!token) {
-        // navigate("/login");
         return;
       }
       const config = {
@@ -136,11 +133,11 @@ const ProductDetails = () => {
   };
 
   if (!product || !activeImg) {
-    return <Spinner/>;
+    return <Spinner />;
   }
 
   return (
-    <div className="flex flex-col justify-between mt-10 lg:flex-row gap-16 lg:items-center ">
+    <div className="flex flex-col justify-between mt-10 lg:flex-row gap-16 lg:items-center pl-3">
       <ToastContainer />
       <div className="flex flex-col gap-6 lg:w-2/4">
         <img
@@ -148,13 +145,13 @@ const ProductDetails = () => {
           alt=""
           className="w-3/4 aspect-square ml-5 object-contain rounded-xl"
         />
-        <div className="flex flex-row justify-between h-24">
+        <div className="flex flex-row justify-start h-24 overflow-x-auto space-x-4">
           {product.imageGallery.map((image, index) => (
             <img
               key={index}
               src={image}
               alt={`Thumbnail ${index + 1}`}
-              className="w-24 h-24 ml-5 rounded-md cursor-pointer object-contain"
+              className="w-24 h-24 rounded-md cursor-pointer object-contain"
               onClick={() => handleImageClick(image)}
             />
           ))}
@@ -226,4 +223,3 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
-
