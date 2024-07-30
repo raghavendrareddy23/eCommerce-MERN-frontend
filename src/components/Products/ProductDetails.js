@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../../Api/api";
-import { useNavigate } from "react-router-dom";
 import Spinner from "../../assets/spinner";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,7 +12,6 @@ const ProductDetails = () => {
   const [inCart, setInCart] = useState(false);
   const [inWishlist, setInWishlist] = useState(false);
   const userId = sessionStorage.getItem("UserId");
-  const navigate = useNavigate();
 
   useEffect(() => {
     sessionStorage.setItem("productId", productId);
@@ -91,10 +89,6 @@ const ProductDetails = () => {
   const handleAddToCart = async () => {
     try {
       const token = sessionStorage.getItem("Token");
-      if (!token) {
-        // navigate("/login");
-        return;
-      }
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
