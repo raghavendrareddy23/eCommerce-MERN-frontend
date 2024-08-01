@@ -19,8 +19,38 @@ const ContactUs = () => {
     });
   };
 
+  const validateForm = () => {
+    const { name, email, contactNumber, message } = formData;
+
+    if (!name) {
+      toast.error("Name is required.");
+      return false;
+    }
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      toast.error("Valid email is required.");
+      return false;
+    }
+
+    if (!contactNumber || !/^\d{10}$/.test(contactNumber)) {
+      toast.error("Contact number must be a 10-digit number.");
+      return false;
+    }
+
+    if (!message) {
+      toast.error("Message cannot be empty.");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return; // Stop form submission if validation fails
+    }
 
     setLoading(true); // Start loading
 
