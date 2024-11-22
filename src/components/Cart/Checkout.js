@@ -29,6 +29,7 @@ const CheckoutButton = ({ items }) => {
 
       // Connect to the Socket.IO server
       const socket = io("https://ecommerce-mern-backend-mtnf.onrender.com");
+      // const socket = io("https://ecommerce-mern-backend-a83s.onrender.com");
 
       // Emit a message to the server
       console.log("Emitting checkout event with user ID:", userId);
